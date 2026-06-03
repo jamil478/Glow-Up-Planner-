@@ -1,0 +1,711 @@
+# <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Glow Up Daily Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #f9d8e0;
+    --rose: #e8a0b4;
+    --deep-rose: #c4687e;
+    --petal: #fceef2;
+    --cream: #fff8f9;
+    --mauve: #b5718a;
+    --dark: #3a2030;
+    --soft: #f2c4d0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(135deg, #fce4ec 0%, #fff0f5 40%, #fce4ec 100%);
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--dark);
+    padding: 20px;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--cream);
+    border-radius: 24px;
+    padding: 40px 44px;
+    box-shadow: 0 20px 80px rgba(196,104,126,0.18);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Decorative blobs */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, #f9d8e0 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .page::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, #fce4ec 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .bow {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 4px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .header h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3rem;
+    color: var(--deep-rose);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+
+  .header .subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-top: 6px;
+  }
+
+  .date-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 14px;
+  }
+
+  .date-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--mauve);
+    letter-spacing: 1px;
+  }
+
+  .date-field span { font-size: 0.75rem; text-transform: uppercase; }
+  .date-line {
+    width: 110px;
+    border-bottom: 1.5px dashed var(--rose);
+    display: inline-block;
+    margin-left: 4px;
+  }
+
+  .day-pills {
+    display: flex; gap: 6px; justify-content: center; margin-top: 10px;
+  }
+  .day-pill {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rose);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 500;
+    color: var(--mauve);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .day-pill:hover, .day-pill.active {
+    background: var(--deep-rose);
+    color: white;
+    border-color: var(--deep-rose);
+    transform: scale(1.08);
+  }
+
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 22px 0 18px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--soft); }
+  .divider-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.05rem;
+    color: var(--rose);
+    white-space: nowrap;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: white;
+    background: var(--deep-rose);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  /* Cards grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  .card {
+    background: var(--petal);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px solid rgba(228,160,180,0.3);
+    position: relative;
+  }
+
+  .card.full { grid-column: 1 / -1; }
+
+  .card-title {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  /* Affirmation box */
+  .affirmation {
+    background: linear-gradient(135deg, var(--deep-rose), var(--mauve));
+    border-radius: 16px;
+    padding: 18px 22px;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .affirmation .aff-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  .affirmation .aff-label {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+
+  /* Input lines */
+  .input-line {
+    width: 100%;
+    border: none;
+    border-bottom: 1.2px dashed var(--rose);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--dark);
+    padding: 5px 2px;
+    margin-bottom: 6px;
+    outline: none;
+    display: block;
+  }
+  .input-line::placeholder { color: #d4a4b4; font-size: 0.75rem; }
+
+  textarea.input-line {
+    resize: none;
+    border: 1.2px dashed var(--rose);
+    border-radius: 10px;
+    padding: 8px 10px;
+    min-height: 60px;
+  }
+
+  /* Checkboxes */
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.83rem;
+  }
+  .check-box {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rose);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-box:hover { background: var(--blush); }
+  .check-box.checked {
+    background: var(--deep-rose);
+    border-color: var(--deep-rose);
+  }
+  .check-box.checked::after { content: '✓'; color: white; font-size: 10px; }
+  .check-label { color: var(--dark); }
+  .check-label.done { text-decoration: line-through; color: var(--mauve); }
+
+  /* Mood tracker */
+  .mood-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;
+  }
+  .mood-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rose);
+    background: white;
+    cursor: pointer;
+    font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .mood-btn:hover, .mood-btn.active {
+    transform: scale(1.18);
+    box-shadow: 0 4px 14px rgba(196,104,126,0.3);
+    border-color: var(--deep-rose);
+  }
+
+  /* Water tracker */
+  .water-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+  .drop {
+    width: 28px; height: 36px;
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  .drop svg { width: 100%; height: 100%; }
+  .drop.filled svg path { fill: #e8a0b4; }
+  .drop:hover { filter: brightness(1.1); }
+
+  /* Priority numbers */
+  .priority-item {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .priority-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--deep-rose);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Skincare section */
+  .skincare-col { display: flex; flex-direction: column; gap: 8px; }
+  .am-pm-label {
+    font-size: 0.7rem; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--deep-rose);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* Movement */
+  .movement-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+
+  /* Trackers */
+  .tracker-circles { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .t-circle {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1.5px solid var(--rose);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .t-circle.filled { background: var(--deep-rose); border-color: var(--deep-rose); }
+
+  /* Evening section */
+  .evening-bg {
+    background: linear-gradient(135deg, #fce4ec, #fff0f5);
+    border-radius: 20px;
+    padding: 20px 22px;
+    border: 1px solid rgba(228,160,180,0.4);
+    margin-top: 18px;
+  }
+
+  /* Gratitude stars */
+  .gratitude-list { display: flex; flex-direction: column; gap: 8px; }
+  .grat-item {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .star-icon { color: var(--rose); font-size: 1rem; flex-shrink: 0; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 28px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    color: var(--rose);
+    opacity: 0.8;
+  }
+
+  /* Print button */
+  .print-btn {
+    display: block;
+    margin: 20px auto 0;
+    background: linear-gradient(135deg, var(--deep-rose), var(--mauve));
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(196,104,126,0.35);
+  }
+  .print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(196,104,126,0.45);
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; padding: 30px; }
+    .print-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="bow">🎀</span>
+    <h1>The Glow Up Daily Planner</h1>
+    <p class="subtitle">self-care · intention · radiance</p>
+    <div class="date-row">
+      <div class="date-field">
+        <span>Date</span>
+        <span class="date-line"></span>
+      </div>
+    </div>
+    <div class="day-pills" id="dayPills">
+      <div class="day-pill" onclick="toggleDay(this)">S</div>
+      <div class="day-pill" onclick="toggleDay(this)">M</div>
+      <div class="day-pill" onclick="toggleDay(this)">T</div>
+      <div class="day-pill" onclick="toggleDay(this)">W</div>
+      <div class="day-pill" onclick="toggleDay(this)">T</div>
+      <div class="day-pill" onclick="toggleDay(this)">F</div>
+      <div class="day-pill" onclick="toggleDay(this)">S</div>
+    </div>
+  </div>
+
+  <!-- AFFIRMATION -->
+  <div class="affirmation">
+    <div class="aff-text">"I am allowed to bloom at my own pace. ✨"</div>
+    <div class="aff-label">Today's Affirmation</div>
+  </div>
+
+  <!-- MORNING INTENTION -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">🌸 Morning Intention</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">✨ My Intention For Today</div>
+      <textarea class="input-line" placeholder="I intend to..."></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title">💭 How I Want To Feel</div>
+      <textarea class="input-line" placeholder="Calm, confident, radiant..."></textarea>
+    </div>
+  </div>
+
+  <!-- TOP 3 PRIORITIES -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">💅 Top 3 Priorities</div>
+    <div class="priority-item">
+      <div class="priority-num">1</div>
+      <input class="input-line" type="text" placeholder="Most important thing today...">
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">2</div>
+      <input class="input-line" type="text" placeholder="">
+    </div>
+    <div class="priority-item">
+      <div class="priority-num">3</div>
+      <input class="input-line" type="text" placeholder="">
+    </div>
+  </div>
+
+  <!-- MORNING ROUTINE & WELLNESS -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">🌺 Wellness Check</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+
+    <!-- Morning Glow Routine -->
+    <div class="card">
+      <div class="card-title">☀️ Morning Glow Routine</div>
+      <div id="morningChecks">
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Make your bed</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Hydrate (glass of water)</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Skincare routine</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Move your body</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Journaling / reading</span>
+        </div>
+        <div class="check-item">
+          <div class="check-box" onclick="toggleCheck(this)"></div>
+          <span class="check-label">Get ready like your best self</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mood + Water -->
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div class="card">
+        <div class="card-title">💗 Mood Tracker</div>
+        <div class="mood-row">
+          <div class="mood-btn" onclick="toggleMood(this)" title="Radiant">🌟</div>
+          <div class="mood-btn" onclick="toggleMood(this)" title="Happy">😊</div>
+          <div class="mood-btn" onclick="toggleMood(this)" title="Okay">😐</div>
+          <div class="mood-btn" onclick="toggleMood(this)" title="Low">😔</div>
+          <div class="mood-btn" onclick="toggleMood(this)" title="Anxious">😰</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">💧 Hydration (8 cups)</div>
+        <div class="water-row" id="waterDrops"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOVEMENT -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">🏃‍♀️ Move My Body</div>
+    <div class="movement-grid">
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Cardio</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Weights / Strength</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Yoga / Pilates</span></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Stretch / Rest</span></div>
+    </div>
+    <input class="input-line" type="text" placeholder="Duration / Notes..." style="margin-top:8px;">
+  </div>
+
+  <!-- SKINCARE -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">✨ Skincare Ritual</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="am-pm-label">🌤 AM Routine</div>
+      <input class="input-line" type="text" placeholder="Step 1 (Cleanser)">
+      <input class="input-line" type="text" placeholder="Step 2 (Toner/Serum)">
+      <input class="input-line" type="text" placeholder="Step 3 (Moisturizer)">
+      <input class="input-line" type="text" placeholder="Step 4 (SPF)">
+    </div>
+    <div class="card">
+      <div class="am-pm-label">🌙 PM Routine</div>
+      <input class="input-line" type="text" placeholder="Step 1 (Cleanse/Remove)">
+      <input class="input-line" type="text" placeholder="Step 2 (Treatment/Serum)">
+      <input class="input-line" type="text" placeholder="Step 3 (Night Cream)">
+      <input class="input-line" type="text" placeholder="Step 4 (Eye Cream/Oil)">
+    </div>
+  </div>
+
+  <!-- DAILY MEALS -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">🍓 Nourish Your Body</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">🌅 Breakfast</div>
+      <textarea class="input-line" placeholder="What I'll eat..."></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title">☀️ Lunch</div>
+      <textarea class="input-line" placeholder="What I'll eat..."></textarea>
+    </div>
+    <div class="card">
+      <div class="card-title">🌙 Dinner</div>
+      <textarea class="input-line" placeholder="What I'll eat..."></textarea>
+    </div>
+  </div>
+
+  <!-- GRATITUDE & NOTES -->
+  <div class="grid-2" style="margin-bottom:18px;">
+    <div class="card">
+      <div class="card-title">🙏 What I'm Grateful For</div>
+      <div class="gratitude-list">
+        <div class="grat-item"><span class="star-icon">✦</span><input class="input-line" type="text" placeholder=""></div>
+        <div class="grat-item"><span class="star-icon">✦</span><input class="input-line" type="text" placeholder=""></div>
+        <div class="grat-item"><span class="star-icon">✦</span><input class="input-line" type="text" placeholder=""></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📝 Notes & Brain Dump</div>
+      <textarea class="input-line" style="min-height:90px;" placeholder="Thoughts, ideas, reminders..."></textarea>
+    </div>
+  </div>
+
+  <!-- SLEEP & PERIOD TRACKERS -->
+  <div class="grid-2" style="margin-bottom:18px;">
+    <div class="card">
+      <div class="card-title">💤 Sleep Tracker (hours)</div>
+      <div class="tracker-circles" id="sleepCircles"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌸 Period Tracker</div>
+      <div style="display:flex; gap:14px; margin-top:4px;">
+        <div style="text-align:center; font-size:0.7rem; color:var(--mauve);">
+          <div style="font-size:1.4rem;">💧</div>No Flow
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:var(--mauve);">
+          <div style="font-size:1.4rem;">🩸</div>Light
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:var(--mauve);">
+          <div style="font-size:1.4rem;">🩸🩸</div>Heavy
+        </div>
+      </div>
+      <input class="input-line" type="text" placeholder="Notes..." style="margin-top:10px;">
+    </div>
+  </div>
+
+  <!-- EVENING RESET -->
+  <div class="evening-bg">
+    <div class="divider" style="margin-top:0;">
+      <div class="divider-line"></div>
+      <div class="divider-text">🌙 Evening Reset</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="card">
+        <div class="card-title">🏆 One Win Today</div>
+        <textarea class="input-line" placeholder="I'm proud that I..."></textarea>
+      </div>
+      <div class="card">
+        <div class="card-title">🪫 What Drained Me</div>
+        <textarea class="input-line" placeholder="What felt heavy..."></textarea>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-title">🌙 Night Routine</div>
+      <div class="movement-grid">
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Remove makeup / cleanse</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Prep for tomorrow</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Tidy your space</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">No phone 30 min before bed</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Journaling / reflect</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span class="check-label">Gratitude moment</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌸 What I'll Release Tonight</div>
+      <textarea class="input-line" placeholder="I let go of..."></textarea>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">Your glow era starts today 🌸✨</div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+</div>
+
+<script>
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    const label = el.nextElementSibling;
+    if (label) label.classList.toggle('done');
+  }
+
+  function toggleMood(el) {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleDay(el) {
+    el.classList.toggle('active');
+  }
+
+  // Water drops
+  const waterContainer = document.getElementById('waterDrops');
+  for (let i = 0; i < 8; i++) {
+    const drop = document.createElement('div');
+    drop.className = 'drop';
+    drop.innerHTML = `<svg viewBox="0 0 30 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 2 C15 2 2 18 2 26 C2 33.7 7.9 40 15 40 C22.1 40 28 33.7 28 26 C28 18 15 2 15 2Z" fill="#f9d8e0" stroke="#e8a0b4" stroke-width="1.5"/>
+    </svg>`;
+    drop.addEventListener('click', function() {
+      this.classList.toggle('filled');
+    });
+    waterContainer.appendChild(drop);
+  }
+
+  // Sleep circles (1-8 hours)
+  const sleepContainer = document.getElementById('sleepCircles');
+  for (let i = 1; i <= 9; i++) {
+    const circle = document.createElement('div');
+    circle.className = 't-circle';
+    circle.title = i + ' hr';
+    circle.addEventListener('click', function() {
+      const all = sleepContainer.querySelectorAll('.t-circle');
+      const idx = Array.from(all).indexOf(this);
+      all.forEach((c, j) => {
+        if (j <= idx) c.classList.add('filled');
+        else c.classList.remove('filled');
+      });
+    });
+    sleepContainer.appendChild(circle);
+  }
+</script>
+
+</body>
+</html>
+Glow-Up-Planner-
